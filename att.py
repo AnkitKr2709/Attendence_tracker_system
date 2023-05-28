@@ -1,8 +1,6 @@
-# from face_recognition.face_recognition.api
-# import load_image_file, face_locations, batch_face_locations, face_landmarks, face_encodings, compare_faces, face_distance
 import cv2
 import numpy as np
-# import face_recognition_models
+
 import face_recognition
 import os
 from datetime import datetime
@@ -12,12 +10,12 @@ path = 'images'
 images = []
 personName = []
 myList = os.listdir(path)
-# print(myList)
+
 for cu_img in myList:
     current_Img = cv2.imread(os.path.join(path, cu_img))
     images.append(current_Img)
     personName.append(os.path.splitext(cu_img)[0])
-# print(personName)
+
 
 
 def mailSender(email):
@@ -86,32 +84,30 @@ while True:
     facesCurrentFrame = face_recognition.face_locations(faces)
     encodesCurrentFrame = face_recognition.face_encodings(faces)
 
-    # print(facesCurrentFrame)
-    # print(encodesCurrentFrame)
+
     if facesCurrentFrame != []:
-        # print(facesCurrentFrame)
         y1, x2, y2, x1 = facesCurrentFrame[0]
         y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 2)
         cv2.rectangle(frame, (x1, y2-35), (x2, y2), (0, 0, 0), cv2.FILLED)
         matches = face_recognition.compare_faces(encodeListKnown, encodesCurrentFrame[0])
-        # print(matches)
+        
         matchIndex = np.argmax(matches)
-        # print(matchIndex)
+     
 
         if matches[matchIndex] == True:
             name = personName[matchIndex].upper()
-            # print(name)
+           
             n1=name
             if(n1!=g):
-                # mailSender(dict1[n1])
+                
                 g=n1
             
             cv2.putText(frame, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
             attendance(name)
 
     cv2.imshow("camera", frame)
-    if cv2.waitKey(10) == 13:  # "enter key" ascii (13)
+    if cv2.waitKey(10) == 13: 
         break
 cap.release()
 cv2.destroyAllWindows()
